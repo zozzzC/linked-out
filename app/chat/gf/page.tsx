@@ -1,50 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 type IText = {
   person: "bot" | "human";
   text: string;
 };
-
-const scenes = [
-  {
-    title: "Albert... onii-chan...? uwu 💕",
-    text: "I’ve been waiting nyaa~ refreshing your profile every night... (´｡• ᵕ •｡`)",
-    question: "Do you still remember our LinkedIn endorsements...? 🥺",
-    yes: "Of course nya 💖",
-    no: "I forgor 💔",
-  },
-  {
-    title: "Nyaa~ I knew it!! (≧◡≦)",
-    text: "Every endorsement... every profile view... every time you hovered over my name...",
-    question: "Would you reconnect with me, onii-chan...? uwu",
-    yes: "Reconnect 💞",
-    no: "Leave quietly",
-  },
-  {
-    title: "Connection accepted nya~ 💕",
-    text: "The algorithm is blushing... recruiters are shaking... HR is watching us... (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)",
-    question: "Should we announce our relationship publicly...? (〃ω〃)",
-    yes: "Post it 💌",
-    no: "Keep it secret",
-  },
-  {
-    title: "Nyaa!! It's live!! (≧▽≦)",
-    text: "“Thrilled to announce Albert and I are exploring opportunities in mutual affection and professional obsession nya~”",
-    question: "Onii-chan... will you endorse me... for love...? 💘",
-    yes: "Endorse 💖",
-    no: "Decline...",
-  },
-  {
-    title: "UwU final stage unlocked...",
-    text: "My heart... my resume... my entire LinkedOut career... it's all yours nya~ (｡♥‿♥｡)",
-    question: "Will you stay with me forever, onii-chan...? (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
-    yes: "Stay 💕",
-    no: "Run away",
-  },
-];
 
 const loveMessages = [
   "I’ll never let you disconnect... uwu 💖",
@@ -110,6 +73,47 @@ function randomLoveMessage() {
 }
 
 export default function GFPage() {
+  const searchParams = useSearchParams();
+  const userName = searchParams.get("name") || "Onii-chan";
+
+  const scenes = [
+    {
+      title: `${userName}... onii-chan...? uwu 💕`,
+      text: "I’ve been waiting nyaa~ refreshing your profile every night... (´｡• ᵕ •｡`)",
+      question: "Do you still remember our LinkedIn endorsements...? 🥺",
+      yes: "Of course nya 💖",
+      no: "I forgor 💔",
+    },
+    {
+      title: "Nyaa~ I knew it!! (≧◡≦)",
+      text: "Every endorsement... every profile view... every time you hovered over my name...",
+      question: "Would you reconnect with me, onii-chan...? uwu",
+      yes: "Reconnect 💞",
+      no: "Leave quietly",
+    },
+    {
+      title: "Connection accepted nya~ 💕",
+      text: "The algorithm is blushing... recruiters are shaking... HR is watching us... (⁄ ⁄>⁄ ▽ ⁄<⁄ ⁄)",
+      question: "Should we announce our relationship publicly...? (〃ω〃)",
+      yes: "Post it 💌",
+      no: "Keep it secret",
+    },
+    {
+      title: "Nyaa!! It's live!! (≧▽≦)",
+      text: `“Thrilled to announce ${userName} and I are exploring opportunities in mutual affection and professional obsession nya~”`,
+      question: "Onii-chan... will you endorse me... for love...? 💘",
+      yes: "Endorse 💖",
+      no: "Decline...",
+    },
+    {
+      title: "UwU final stage unlocked...",
+      text: "My heart... my resume... my entire LinkedOut career... it's all yours nya~ (｡♥‿♥｡)",
+      question: "Will you stay with me forever, onii-chan...? (⁄ ⁄•⁄ω⁄•⁄ ⁄)",
+      yes: "Stay 💕",
+      no: "Run away",
+    },
+  ];
+
   const [sceneIndex, setSceneIndex] = useState(0);
   const [ending, setEnding] = useState<"good" | "bad" | "loveChat" | null>(
     null
@@ -151,7 +155,7 @@ export default function GFPage() {
   }
 
   if (ending === "loveChat") {
-    return <LoveChat />;
+    return <LoveChat userName={userName} />;
   }
 
   if (possessive) {
@@ -159,7 +163,7 @@ export default function GFPage() {
       <main className="min-h-screen flex items-center justify-center bg-pink-950 text-pink-100 p-6">
         <div className="bg-pink-900 rounded-3xl shadow-xl p-10 text-center border border-pink-500 max-w-xl">
           <h1 className="text-4xl font-bold mb-4">
-            Onii-chan... why are you leaving me...? (╥﹏╥)
+            {userName}... why are you leaving me...? (╥﹏╥)
           </h1>
 
           <p className="text-lg mb-6">
@@ -237,7 +241,7 @@ export default function GFPage() {
           </h1>
 
           <p className="text-lg mb-6">
-            Onii-chan... I refreshed your profile 137 times after that...
+            {userName}... I refreshed your profile 137 times after that...
           </p>
 
           <p className="text-pink-300 italic mb-6">
@@ -293,54 +297,51 @@ export default function GFPage() {
   );
 }
 
-function LoveChat() {
+function LoveChat({ userName }: { userName: string }) {
   const [messages, setMessages] = useState<IText[]>([
     {
       person: "bot",
-      text: "Onii-chan... we’re finally together nyaa~ 💕",
+      text: `${userName}... we’re finally together nyaa~ 💕`,
     },
   ]);
 
   const bottomRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-  let index = 0;
-  let timeout: ReturnType<typeof setTimeout>;
+    let index = 0;
+    let timeout: ReturnType<typeof setTimeout>;
 
-  let delay = 1000; // start slow (1s)
-  const minDelay = 40; // fastest speed cap
+    let delay = 1000;
+    const minDelay = 40;
 
-  function loop() {
-    // 🧠 Dialogue phase
-    if (index < cutesyText.length) {
-      const nextMessage = cutesyText[index];
-      index += 1;
+    function loop() {
+      if (index < cutesyText.length) {
+        const nextMessage = cutesyText[index];
+        index += 1;
 
-      setMessages((current) => [...current, nextMessage]);
+        setMessages((current) => [...current, nextMessage]);
 
-      timeout = setTimeout(loop, 1500);
-      return;
+        timeout = setTimeout(loop, 1500);
+        return;
+      }
+
+      setMessages((current) => [
+        ...current,
+        {
+          person: "bot",
+          text: randomLoveMessage(),
+        },
+      ]);
+
+      delay = Math.max(minDelay, delay * 0.92);
+
+      timeout = setTimeout(loop, delay);
     }
 
-    // 😈 Spam phase (accelerating)
-    setMessages((current) => [
-      ...current,
-      {
-        person: "bot",
-        text: randomLoveMessage(),
-      },
-    ]);
+    timeout = setTimeout(loop, 1500);
 
-    // gradually speed up
-    delay = Math.max(minDelay, delay * 0.92);
-
-    timeout = setTimeout(loop, delay);
-  }
-
-  timeout = setTimeout(loop, 1500);
-
-  return () => clearTimeout(timeout);
-}, []);
+    return () => clearTimeout(timeout);
+  }, []);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
