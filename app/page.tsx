@@ -1,3 +1,5 @@
+import Profile from "./components/Profile";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-gray-100">
@@ -23,7 +25,9 @@ export default function Home() {
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-5">
-          <p className="font-semibold text-gray-800 mb-4">Trending on LinkedOut</p>
+          <p className="font-semibold text-gray-800 mb-4">
+            Trending on LinkedOut
+          </p>
 
           <div className="space-y-4">
             <div className="border border-gray-200 rounded-xl p-4">
@@ -49,23 +53,7 @@ export default function Home() {
 
       {/* LinkedIn-style dashboard preview */}
       <section className="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-12 gap-4">
-        {/* Left Sidebar */}
-        <aside className="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <div className="h-16 bg-blue-700 rounded-t-lg"></div>
-          <div className="h-16 w-16 bg-gray-300 rounded-full border-4 border-white -mt-8 mx-auto"></div>
-
-          <h2 className="text-center font-semibold mt-2">Your Profile</h2>
-          <p className="text-center text-sm text-gray-500">
-            Junior Career Assassin
-          </p>
-
-          <div className="mt-4 border-t pt-4 text-sm text-gray-600 space-y-2">
-            <p>Connections sabotaged: <strong>12</strong></p>
-            <p>Reports filed: <strong>34</strong></p>
-            <p>Careers ended: <strong>7</strong></p>
-          </div>
-        </aside>
-
+        <Profile />
         {/* Feed */}
         <main className="md:col-span-6 space-y-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
@@ -149,3 +137,4 @@ function PersonSuggestion({ name, role }: { name: string; role: string }) {
     </div>
   );
 }
+
