@@ -47,7 +47,7 @@ function makeCoworker(): Coworker {
 }
 
 export default function RightSidebar() {
-  const { people, setPeople } = useFiredContext();
+  const { firePerson } = useFiredContext();
 
   const [suggestions, setSuggestions] = useState<Coworker[]>([
     {
@@ -87,20 +87,30 @@ export default function RightSidebar() {
     );
   }
 
-  function confirmFire() {
-    if (!selectedPerson) return;
+function confirmFire() {
+  if (!selectedPerson) return;
 
-    setPeople([...people, selectedPerson.name]);
-    replaceSuggestion(selectedPerson.id);
-    setSelectedPerson(null);
-    setReason("");
-  }
+  const name = selectedPerson.name;
+  const id = selectedPerson.id;
+
+  // Close modal immediately
+  setSelectedPerson(null);
+  setReason("");
+
+  // Optional: replace suggestion immediately
+  replaceSuggestion(id);
+
+  // Delay the actual "firing"
+  setTimeout(() => {
+    firePerson(name);
+  }, 3000);
+}
 
   return (
     <>
       <aside className="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
         <h2 className="font-semibold text-gray-900">
-          People you may want fired
+          Opps you may want fired
         </h2>
 
         <div className="mt-4 space-y-4">

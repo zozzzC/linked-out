@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FiredFeed from "./components/FiredFeed";
 import Profile from "./components/Profile";
 import RightSidebar from "./components/RightSidebar";
@@ -11,18 +11,58 @@ type Post = {
   body: string;
 };
 
+const anonymousRumours = [
+  "heard you schedule meetings just to feel something",
+  "apparently you say 'circle back' unironically",
+  "someone said you open Excel and just stare at it",
+  "rumor is you reply-all to everything",
+  "people think your biggest contribution is typing 'thanks!'",
+  "you once pushed to prod on a Friday and left early",
+  "you introduce bugs just to feel important",
+  "you say 'quick sync' and mean 2 hours",
+  "you use dark mode but still make bad decisions",
+  "your commits have no descriptions and it shows",
+  "you’ve been 'working on that task' for 3 weeks",
+  "your strongest skill is looking busy during standup",
+  "someone said your calendar is full but your output is empty",
+];
+
+function generateRumourPost() {
+  const count = Math.floor(Math.random() * 3) + 2;
+  const shuffled = [...anonymousRumours].sort(() => 0.5 - Math.random());
+
+  return shuffled.slice(0, count).join(". ") + ".";
+}
+
 export default function Home() {
   const [isPostOverlayOpen, setIsPostOverlayOpen] = useState(false);
   const [postText, setPostText] = useState("");
   const [posts, setPosts] = useState<Post[]>([]);
   const [postMode, setPostMode] = useState<"normal" | "ruin">("normal");
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newPost: Post = {
+        name: "Anonymous",
+        title: "Anonymous > you",
+        body: generateRumourPost(),
+      };
+
+      setPosts((currentPosts) => [newPost, ...currentPosts]);
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   function handlePost() {
     if (!postText.trim()) return;
 
     const newPost: Post = {
       name: "Anonymous",
-      title: postMode === "ruin" ? "Career Termination Request" : "Workplace Report",
+      title:
+        postMode === "ruin"
+          ? "Career Termination Request"
+          : "Workplace Report",
       body: postText.trim(),
     };
 
@@ -33,22 +73,23 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      {/* Hero */}
       <section className="max-w-6xl mx-auto px-6 py-12 grid md:grid-cols-2 gap-8 items-center">
         <div>
           <h1 className="text-5xl font-bold text-gray-900 leading-tight">
             The professional network for ending careers.
           </h1>
+
           <p className="mt-4 text-lg text-gray-600">
             Connect. Report. Replace. LinkedOut helps you discover coworkers,
             rivals, and strangers who are still somehow employed.
           </p>
 
           <div className="mt-6 flex gap-3">
-            {/* Get Started */}
             <button
+              type="button"
               onClick={() => {
                 setPostMode("normal");
+                setPostText("");
                 setIsPostOverlayOpen(true);
               }}
               className="bg-blue-700 text-white px-6 py-3 rounded-full font-semibold hover:bg-blue-800"
@@ -56,8 +97,8 @@ export default function Home() {
               Get Started
             </button>
 
-            {/* Ruin a Career */}
             <button
+              type="button"
               onClick={() => {
                 setPostMode("ruin");
                 setIsPostOverlayOpen(true);
@@ -108,6 +149,7 @@ export default function Home() {
               type="button"
               onClick={() => {
                 setPostMode("normal");
+                setPostText("");
                 setIsPostOverlayOpen(true);
               }}
               className="mt-3 h-10 w-full rounded-full border border-gray-300 flex items-center px-4 text-gray-400 hover:bg-gray-50 text-left"
@@ -116,16 +158,16 @@ export default function Home() {
             </button>
           </div>
 
+          <FiredFeed />
+
           {posts.map((post, index) => (
             <FeedPost
-              key={index}
+              key={`${post.title}-${index}`}
               name={post.name}
               title={post.title}
               body={post.body}
             />
           ))}
-
-          <FiredFeed />
 
           <FeedPost
             name="Corporate Compliance Bot"
@@ -143,7 +185,6 @@ export default function Home() {
         <RightSidebar />
       </section>
 
-      {/* Modal */}
       {isPostOverlayOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="w-full max-w-xl rounded-2xl bg-white shadow-xl">
@@ -156,7 +197,10 @@ export default function Home() {
 
               <button
                 type="button"
-                onClick={() => setIsPostOverlayOpen(false)}
+                onClick={() => {
+                  setIsPostOverlayOpen(false);
+                  setPostText("");
+                }}
                 className="text-2xl text-gray-400 hover:text-gray-700"
               >
                 ×
@@ -230,6 +274,7 @@ function FeedPost({
     <article className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
       <div className="flex gap-3">
         <div className="h-11 w-11 rounded-full bg-gray-300"></div>
+
         <div>
           <p className="font-semibold text-gray-900">{name}</p>
           <p className="text-sm text-gray-500">{title}</p>
