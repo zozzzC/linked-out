@@ -9,6 +9,7 @@ type Post = {
   name: string;
   title: string;
   body: string;
+  id: string;
 };
 
 const anonymousRumours = [
@@ -46,10 +47,11 @@ export default function Home() {
         name: "Anonymous",
         title: "Anonymous > you",
         body: generateRumourPost(),
+        id: crypto.randomUUID(),
       };
 
       setPosts((currentPosts) => [newPost, ...currentPosts]);
-    }, 15000);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -60,10 +62,9 @@ export default function Home() {
     const newPost: Post = {
       name: "Anonymous",
       title:
-        postMode === "ruin"
-          ? "Career Termination Request"
-          : "Workplace Report",
+        postMode === "ruin" ? "Career Termination Request" : "Workplace Report",
       body: postText.trim(),
+      id: crypto.randomUUID(),
     };
 
     setPosts((currentPosts) => [newPost, ...currentPosts]);
@@ -162,7 +163,7 @@ export default function Home() {
 
           {posts.map((post, index) => (
             <FeedPost
-              key={`${post.title}-${index}`}
+              key={`${post.id}`}
               name={post.name}
               title={post.title}
               body={post.body}
@@ -262,10 +263,7 @@ function FeedPost({
   function handleComment() {
     if (!commentText.trim()) return;
 
-    setComments((currentComments) => [
-      ...currentComments,
-      commentText.trim(),
-    ]);
+    setComments((currentComments) => [...currentComments, commentText.trim()]);
 
     setCommentText("");
   }
@@ -290,9 +288,7 @@ function FeedPost({
         <div className="mt-4 flex justify-between text-sm text-gray-500">
           <div>
             {likeCount > 0 && <span>👍 {likeCount} Like </span>}
-            {celebrateCount > 0 && (
-              <span>🎉 {celebrateCount} Celebrate </span>
-            )}
+            {celebrateCount > 0 && <span>🎉 {celebrateCount} Celebrate </span>}
             {hahaCount > 0 && <span>😂 {hahaCount} Haha</span>}
           </div>
 
@@ -396,3 +392,4 @@ function FeedPost({
     </article>
   );
 }
+
