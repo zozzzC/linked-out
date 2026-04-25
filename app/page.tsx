@@ -5,9 +5,30 @@ import FiredFeed from "./components/FiredFeed";
 import Profile from "./components/Profile";
 import RightSidebar from "./components/RightSidebar";
 
+type Post = {
+  name: string;
+  title: string;
+  body: string;
+};
+
 export default function Home() {
   const [isPostOverlayOpen, setIsPostOverlayOpen] = useState(false);
   const [postText, setPostText] = useState("");
+  const [posts, setPosts] = useState<Post[]>([]);
+
+  function handlePost() {
+    if (!postText.trim()) return;
+
+    const newPost: Post = {
+      name: "Anonymous",
+      title: "Workplace Report",
+      body: postText.trim(),
+    };
+
+    setPosts((currentPosts) => [newPost, ...currentPosts]);
+    setPostText("");
+    setIsPostOverlayOpen(false);
+  }
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -59,11 +80,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* LinkedIn-style dashboard preview */}
       <section className="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-12 gap-4">
         <Profile />
 
-        {/* Feed */}
         <main className="md:col-span-6 space-y-4">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
             <p className="text-sm text-gray-500">Start a workplace rumor</p>
@@ -76,6 +95,15 @@ export default function Home() {
               Who should be LinkedOut today?
             </button>
           </div>
+
+          {posts.map((post, index) => (
+            <FeedPost
+              key={index}
+              name={post.name}
+              title={post.title}
+              body={post.body}
+            />
+          ))}
 
           <FiredFeed />
 
@@ -129,11 +157,7 @@ export default function Home() {
                 <button
                   type="button"
                   disabled={!postText.trim()}
-                  onClick={() => {
-                    console.log("Post:", postText);
-                    setPostText("");
-                    setIsPostOverlayOpen(false);
-                  }}
+                  onClick={handlePost}
                   className="rounded-full bg-blue-700 px-6 py-2 font-semibold text-white hover:bg-blue-800 disabled:cursor-not-allowed disabled:bg-gray-300"
                 >
                   Post
@@ -176,4 +200,3 @@ function FeedPost({
     </article>
   );
 }
-
