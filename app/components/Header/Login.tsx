@@ -12,7 +12,7 @@ export default function Login() {
   }
   return (
     <>
-      <button onClick={() => signIn("google", { callbackUrl: "/dashboard" })}>
+      <button onClick={() => signIn("google", { callbackUrl: "/" })}>
         Sign In
       </button>
     </>
