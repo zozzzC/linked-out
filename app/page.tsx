@@ -1,6 +1,12 @@
+"use client";
+import FiredFeed from "./components/FiredFeed";
 import Profile from "./components/Profile";
+import RightSidebar from "./components/RightSidebar";
+import { useFiredContext } from "./lib/FiredProvider";
 
 export default function Home() {
+  const { people } = useFiredContext();
+
   return (
     <main className="min-h-screen bg-gray-100">
       {/* Hero */}
@@ -63,6 +69,8 @@ export default function Home() {
             </div>
           </div>
 
+          <FiredFeed />
+
           <FeedPost
             name="Corporate Compliance Bot"
             title="Official Termination Update"
@@ -77,17 +85,7 @@ export default function Home() {
         </main>
 
         {/* Right Sidebar */}
-        <aside className="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-          <h2 className="font-semibold text-gray-900">
-            People you may want fired
-          </h2>
-
-          <div className="mt-4 space-y-4">
-            <PersonSuggestion name="Sarah" role="Human Resources" />
-            <PersonSuggestion name="Mike" role="Finance Department" />
-            <PersonSuggestion name="Greg" role="Senior Meeting Scheduler" />
-          </div>
-        </aside>
+        <RightSidebar />
       </section>
     </main>
   );
@@ -120,21 +118,6 @@ function FeedPost({
         <button className="hover:text-blue-700">Escalate</button>
       </div>
     </article>
-  );
-}
-
-function PersonSuggestion({ name, role }: { name: string; role: string }) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-full bg-gray-300"></div>
-      <div className="flex-1">
-        <p className="font-medium text-gray-900">{name}</p>
-        <p className="text-xs text-gray-500">{role}</p>
-      </div>
-      <button className="text-xs border border-blue-700 text-blue-700 rounded-full px-3 py-1 hover:bg-blue-50">
-        Fire
-      </button>
-    </div>
   );
 }
 
