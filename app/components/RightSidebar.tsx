@@ -2,6 +2,7 @@
 
 import { Dispatch, SetStateAction } from "react";
 import { useFiredContext } from "../lib/FiredProvider";
+import Image from "next/image";
 
 export default function RightSidebar() {
   return (
@@ -21,7 +22,13 @@ function PersonSuggestion({ name, role }: { name: string; role: string }) {
   if (!people.includes(name)) {
     return (
       <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-full bg-gray-300"></div>
+        <Image
+          className="h-11 w-11 rounded-full"
+          src={`/${name}.jpg`}
+          width={10}
+          height={10}
+          alt={name}
+        />
         <div className="flex-1">
           <p className="font-medium text-gray-900">{name}</p>
           <p className="text-xs text-gray-500">{role}</p>

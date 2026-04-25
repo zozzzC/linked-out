@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function FeedPost({
   name,
   title,
@@ -10,7 +12,13 @@ export default function FeedPost({
   return (
     <article className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
       <div className="flex gap-3">
-        <div className="h-11 w-11 rounded-full bg-gray-300"></div>
+        <Image
+          className="h-11 w-11 rounded-full"
+          src={`/${name}.jpg`}
+          width={10}
+          height={10}
+          alt={name}
+        />
         <div>
           <p className="font-semibold text-gray-900">{name}</p>
           <p className="text-sm text-gray-500">{title}</p>

@@ -1,4 +1,5 @@
 "use client";
+import ChatBar from "./components/Chat/ChatBar";
 import FiredFeed from "./components/FiredFeed";
 import Profile from "./components/Profile";
 import RightSidebar from "./components/RightSidebar";
@@ -86,6 +87,8 @@ export default function Home() {
 
         {/* Right Sidebar */}
         <RightSidebar />
+
+        <ChatBar />
       </section>
     </main>
   );
@@ -120,4 +123,3 @@ function FeedPost({
     </article>
   );
 }
-
