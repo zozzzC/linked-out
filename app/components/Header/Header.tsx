@@ -2,6 +2,7 @@
 import Image from "next/image";
 import linkedOutLogo from "../../../public/linkedout.png";
 import Login from "./Login";
+import Link from "next/link";
 
 export default function Header() {
   return (
@@ -9,7 +10,10 @@ export default function Header() {
       <div className="w-40 flex items-center">
         <Image src={linkedOutLogo} alt="linked out logo"></Image>
       </div>
-      <div className="">
+      <div className="flex items-center justify-end gap-2 h-full">
+        <Link className="font-bold" href="/jobs">
+          Jobs
+        </Link>
         <Login />
       </div>
     </div>
