@@ -14,6 +14,10 @@ export default function Header() {
       </div>
 
       <div className="flex items-center justify-end gap-4 h-full">
+        <Link className="font-bold" href="/opps">
+          Opps
+        </Link>
+
         <Link className="font-bold" href="/jobs">
           Jobs
         </Link>
