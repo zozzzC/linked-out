@@ -88,7 +88,7 @@ export default function ChatPage() {
 
         setTimeout(() => {
           signOut({ callbackUrl: "/chat/ban" });
-        }, 4000);
+        }, 8000);
 
         return;
       }
@@ -240,16 +240,6 @@ export default function ChatPage() {
 
   return (
     <main className="min-h-screen bg-gray-100">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-blue-700">
-          LinkedOut
-        </Link>
-
-        <Link href="/" className="text-sm text-blue-700 hover:underline">
-          ← Back home
-        </Link>
-      </header>
-
       <section className="max-w-3xl mx-auto p-6">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 h-[75vh] flex flex-col">
           <div className="border-b border-gray-200 px-5 py-4">
