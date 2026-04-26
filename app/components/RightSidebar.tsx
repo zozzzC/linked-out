@@ -2,21 +2,45 @@
 
 import { useEffect, useState } from "react";
 import { useFiredContext } from "../lib/FiredProvider";
+import Image from "next/image";
+import PersonSuggestion from "./PersonSuggestion";
 
-type Coworker = {
+export type Coworker = {
   id: string;
   name: string;
   role: string;
 };
 
 const firstNames = [
-  "Ibrahim", "Marie", "Sarah", "I An", "Ambrose", "Albert", "Connor",
-  "Jade", "Trevor", "Aiswarya", "Taara", "Dawn", "Sean", "Thomas",
+  "Ibrahim",
+  "Marie",
+  "Sarah",
+  "I An",
+  "Ambrose",
+  "Albert",
+  "Connor",
+  "Jade",
+  "Trevor",
+  "Aiswarya",
+  "Taara",
+  "Dawn",
+  "Sean",
+  "Thomas",
 ];
 
 const lastNames = [
-  "Waheed", "Patlong", "Sellier", "Park", "Brooke-Munns", "Zhou",
-  "Hare", "Li", "McGurk", "GS", "Siva", "Freshwater",
+  "Waheed",
+  "Patlong",
+  "Sellier",
+  "Park",
+  "Brooke-Munns",
+  "Zhou",
+  "Hare",
+  "Li",
+  "McGurk",
+  "GS",
+  "Siva",
+  "Freshwater",
 ];
 
 const roles = [
@@ -38,7 +62,7 @@ function randomItem(list: string[]) {
   return list[Math.floor(Math.random() * list.length)];
 }
 
-function makeCoworker(): Coworker {
+export function makeCoworker(): Coworker {
   return {
     id: `${Date.now()}-${Math.random()}`,
     name: `${randomItem(firstNames)} ${randomItem(lastNames)}`,
@@ -82,36 +106,34 @@ export default function RightSidebar() {
   function replaceSuggestion(id: string) {
     setSuggestions((currentSuggestions) =>
       currentSuggestions.map((person) =>
-        person.id === id ? makeCoworker() : person
-      )
+        person.id === id ? makeCoworker() : person,
+      ),
     );
   }
 
-function confirmFire() {
-  if (!selectedPerson) return;
+  function confirmFire() {
+    if (!selectedPerson) return;
 
-  const name = selectedPerson.name;
-  const id = selectedPerson.id;
+    const name = selectedPerson.name;
+    const id = selectedPerson.id;
 
-  // Close modal immediately
-  setSelectedPerson(null);
-  setReason("");
+    // Close modal immediately
+    setSelectedPerson(null);
+    setReason("");
 
-  // Optional: replace suggestion immediately
-  replaceSuggestion(id);
+    // Optional: replace suggestion immediately
+    replaceSuggestion(id);
 
-  // Delay the actual "firing"
-  setTimeout(() => {
-    firePerson(name);
-  }, 3000);
-}
+    // Delay the actual "firing"
+    setTimeout(() => {
+      firePerson(name);
+    }, 3000);
+  }
 
   return (
     <>
       <aside className="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-        <h2 className="font-semibold text-gray-900">
-          Opps you may want fired
-        </h2>
+        <h2 className="font-semibold text-gray-900">Opps you may want fired</h2>
 
         <div className="mt-4 space-y-4">
           {suggestions.map((person) => (
@@ -182,31 +204,5 @@ function confirmFire() {
         </div>
       )}
     </>
-  );
-}
-
-function PersonSuggestion({
-  person,
-  onFireClick,
-}: {
-  person: Coworker;
-  onFireClick: () => void;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <div className="h-10 w-10 rounded-full bg-gray-300" />
-
-      <div className="flex-1">
-        <p className="font-medium text-gray-900">{person.name}</p>
-        <p className="text-xs text-gray-500">{person.role}</p>
-      </div>
-
-      <button
-        className="text-xs border border-blue-700 text-blue-700 rounded-full px-3 py-1 hover:bg-blue-50"
-        onClick={onFireClick}
-      >
-        Fire
-      </button>
-    </div>
   );
 }

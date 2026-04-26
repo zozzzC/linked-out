@@ -6,7 +6,7 @@ export default function Profile() {
   const { data: session } = useSession();
 
   return (
-    <aside className="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-4">
+    <aside className="md:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-5 w-full">
       <div className="h-16 bg-blue-700 rounded-t-lg"></div>
       <Image
         className="h-16 w-16 bg-gray-300 rounded-full border-4 border-white -mt-8 mx-auto"

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import FiredFeed from "./components/FiredFeed";
 import Profile from "./components/Profile";
 import RightSidebar from "./components/RightSidebar";
+import Image from "next/image";
 
 type Post = {
   name: string;
@@ -251,7 +252,13 @@ function FeedPost({
   const [liked, setLiked] = useState(false);
   const [celebrated, setCelebrated] = useState(false);
   const [laughed, setLaughed] = useState(false);
+  const [num, setNum] = useState<number | null>(null);
 
+  useEffect(() => {
+    setNum(Math.floor(Math.random() * 99));
+  }, []);
+
+  const avatar = `https://randomuser.me/api/portraits/men/${num}.jpg`;
   const [showComments, setShowComments] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [comments, setComments] = useState<string[]>([]);
@@ -271,7 +278,13 @@ function FeedPost({
   return (
     <article className="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
       <div className="flex gap-3">
-        <div className="h-11 w-11 rounded-full bg-gray-300"></div>
+        <Image
+          alt={"photo"}
+          className="h-10 w-10 rounded-full"
+          src={avatar}
+          width={100}
+          height={100}
+        ></Image>
 
         <div>
           <p className="font-semibold text-gray-900">{name}</p>
@@ -392,4 +405,3 @@ function FeedPost({
     </article>
   );
 }
-
