@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -37,206 +38,205 @@ export default function ChatPage() {
   const [userName, setUserName] = useState<string | null>(null);
 
   function sendMessage() {
-  if (!input.trim()) return;
+    if (!input.trim()) return;
 
-  const userText = input.trim();
-  const userMessage: Message = {
-    sender: "user",
-    text: userText,
-  };
-  
+    const userText = input.trim();
+    const userMessage: Message = {
+      sender: "user",
+      text: userText,
+    };
 
-  // 🧠 FIRST MESSAGE = NAME INPUT
-  if (!userName) {
-    const name = userText;
-    setUserName(name);
+    // 🧠 FIRST MESSAGE = NAME INPUT
+    if (!userName) {
+      const name = userText;
+      setUserName(name);
 
-    // 🚫 BAN IF NAME IS "ban me"
-if (name.toLowerCase() === "clanker") {
-  setMessages((current) => [...current, userMessage]);
-  setInput("");
+      // 🚫 BAN IF NAME IS "ban me"
+      if (name.toLowerCase() === "clanker") {
+        setMessages((current) => [...current, userMessage]);
+        setInput("");
 
-  setTimeout(() => {
-    setMessages((current) => [
-      ...current,
-      {
+        setTimeout(() => {
+          setMessages((current) => [
+            ...current,
+            {
+              sender: "bot",
+              text: "Processing request...",
+            },
+          ]);
+        }, 1000);
+
+        setTimeout(() => {
+          setMessages((current) => [
+            ...current,
+            {
+              sender: "bot",
+              text: "You have voluntarily requested account termination.",
+            },
+          ]);
+        }, 2500);
+
+        setTimeout(() => {
+          setMessages((current) => [
+            ...current,
+            {
+              sender: "bot",
+              text: "Status: Permanently banned.",
+            },
+          ]);
+        }, 4000);
+
+        setTimeout(() => {
+          signOut({ callbackUrl: "/chat/ban" });
+        }, 4000);
+
+        return;
+      }
+
+      // 🔥 INSTANT GF MODE IF "Albert Zhao"
+      if (
+        name.toLowerCase() === "albert zhao" ||
+        name.toLowerCase() == "albert"
+      ) {
+        setMessages((current) => [...current, userMessage]);
+        setInput("");
+
+        setTimeout(() => {
+          setMessages((current) => [
+            ...current,
+            { sender: "bot", text: `Albert...kun...?` },
+          ]);
+        }, 3000);
+
+        setTimeout(() => {
+          setMessages((current) => [
+            ...current,
+            { sender: "bot", text: "Is that really you???" },
+          ]);
+        }, 6000);
+
+        setTimeout(() => {
+          window.location.href = `/chat/gf?name=${encodeURIComponent("Albert")}`;
+        }, 8000);
+
+        return;
+      }
+
+      const botMessage: Message = {
         sender: "bot",
-        text: "Processing request...",
-      },
-    ]);
-  }, 1000);
+        text: `Hello ${name}, would you like to look for jobs?`,
+      };
 
-  setTimeout(() => {
-    setMessages((current) => [
-      ...current,
-      {
-        sender: "bot",
-        text: "You have voluntarily requested account termination.",
-      },
-    ]);
-  }, 2500);
+      setMessages((current) => [...current, userMessage, botMessage]);
+      setInput("");
+      return;
+    }
 
-  setTimeout(() => {
-    setMessages((current) => [
-      ...current,
-      {
-        sender: "bot",
-        text: "Status: Permanently banned.",
-      },
-    ]);
-  }, 4000);
+    // 🧠 AFTER NAME IS SET
 
-  // optional redirect
-  setTimeout(() => {
-    window.location.href = "chat/ban";
-  }, 6000);
+    const lower = userText.toLowerCase();
 
-  return;
-}
+    // 🚫 BAN MODE TRIGGER (safe keyword)
+    if (lower.includes("clanker")) {
+      setMessages((current) => [
+        ...current,
+        userMessage,
+        {
+          sender: "bot",
+          text: "You have violated our extremely serious and definitely real policies.",
+        },
+      ]);
 
-    // 🔥 INSTANT GF MODE IF "Albert Zhao"
-    if (name.toLowerCase() === "albert zhao") {
-      setMessages((current) => [...current, userMessage]);
       setInput("");
 
       setTimeout(() => {
         setMessages((current) => [
           ...current,
-          { sender: "bot", text: `Albert...kun...?` },
+          {
+            sender: "bot",
+            text: "Account status: permanently banned.",
+          },
         ]);
-      }, 3000);
+      }, 2000);
 
       setTimeout(() => {
-        setMessages((current) => [
-          ...current,
-          { sender: "bot", text: "Is that really you???" },
-        ]);
-      }, 6000);
-
-      setTimeout(() => {
-        window.location.href = `/chat/gf?name=${encodeURIComponent("Albert")}`;
-      }, 8000);
+        // optional redirect to a ban screen
+        window.location.href = "/chat/ban";
+      }, 4000);
 
       return;
     }
 
-    const botMessage: Message = {
-      sender: "bot",
-      text: `Hello ${name}, would you like to look for jobs?`,
-    };
+    // 💕 GF MODE TRIGGER
+    if (lower.includes("i love you")) {
+      setMessages((current) => [...current, userMessage]);
+      setInput("");
 
-    setMessages((current) => [...current, userMessage, botMessage]);
-    setInput("");
-    return;
-  }
+      // ⏳ 3 second delay before bot responds
+      setTimeout(() => {
+        setMessages((current) => [
+          ...current,
+          {
+            sender: "bot",
+            text: `${userName}... you finally said it... 💕`,
+          },
+        ]);
+      }, 3000);
 
-  // 🧠 AFTER NAME IS SET
+      // ⏳ then redirect after a bit more time
+      setTimeout(() => {
+        window.location.href = `/chat/gf?name=${encodeURIComponent(userName!)}`;
+      }, 5000);
 
-  const lower = userText.toLowerCase();
+      return;
+    }
 
-  // 🚫 BAN MODE TRIGGER (safe keyword)
-if (lower.includes("clanker")) {
-  setMessages((current) => [
-    ...current,
-    userMessage,
-    {
-      sender: "bot",
-      text: "You have violated our extremely serious and definitely real policies.",
-    },
-  ]);
-
-  setInput("");
-
-  setTimeout(() => {
-    setMessages((current) => [
-      ...current,
-      {
+    // ✅ YES → JOBS
+    if (lower === "yes" || lower === "y") {
+      const botMessage: Message = {
         sender: "bot",
-        text: "Account status: permanently banned.",
-      },
-    ]);
-  }, 2000);
+        text: "Great choice. Redirecting you to jobs...",
+      };
 
-  setTimeout(() => {
-    // optional redirect to a ban screen
-    window.location.href = "/chat/ban";
-  }, 4000);
+      setMessages((current) => [...current, userMessage, botMessage]);
 
-  return;
-}
+      setTimeout(() => {
+        window.location.href = "/jobs";
+      }, 1000);
 
-  // 💕 GF MODE TRIGGER
-  if (lower.includes("i love you")) {
-  setMessages((current) => [...current, userMessage]);
-  setInput("");
+      setInput("");
+      return;
+    }
 
-  // ⏳ 3 second delay before bot responds
-  setTimeout(() => {
-    setMessages((current) => [
-      ...current,
-      {
+    // ❌ NO → ROAST
+    if (lower === "no" || lower === "n") {
+      const roasts = [
+        `${userName}, ambition clearly isn’t your strong suit.`,
+        `Staying unemployed? Bold strategy, ${userName}.`,
+        `${userName}, even the system expected more from you.`,
+        `That’s okay ${userName}, not everyone is ready for disappointment.`,
+        `Avoiding jobs won’t avoid your performance reviews, ${userName}.`,
+      ];
+
+      const botMessage: Message = {
         sender: "bot",
-        text: `${userName}... you finally said it... 💕`,
-      },
-    ]);
-  }, 3000);
+        text: roasts[Math.floor(Math.random() * roasts.length)],
+      };
 
-  // ⏳ then redirect after a bit more time
-  setTimeout(() => {
-    window.location.href = `/chat/gf?name=${encodeURIComponent(userName!)}`;
-  }, 5000);
+      setMessages((current) => [...current, userMessage, botMessage]);
+      setInput("");
+      return;
+    }
 
-  return;
-}
-
-  // ✅ YES → JOBS
-  if (lower === "yes" || lower === "y") {
+    // 🤖 DEFAULT RESPONSE
     const botMessage: Message = {
       sender: "bot",
-      text: "Great choice. Redirecting you to jobs...",
-    };
-
-    setMessages((current) => [...current, userMessage, botMessage]);
-
-    setTimeout(() => {
-      window.location.href = "/jobs";
-    }, 1000);
-
-    setInput("");
-    return;
-  }
-
-  // ❌ NO → ROAST
-  if (lower === "no" || lower === "n") {
-    const roasts = [
-      `${userName}, ambition clearly isn’t your strong suit.`,
-      `Staying unemployed? Bold strategy, ${userName}.`,
-      `${userName}, even the system expected more from you.`,
-      `That’s okay ${userName}, not everyone is ready for disappointment.`,
-      `Avoiding jobs won’t avoid your performance reviews, ${userName}.`,
-    ];
-
-    const botMessage: Message = {
-      sender: "bot",
-      text: roasts[Math.floor(Math.random() * roasts.length)],
+      text: randomReply(),
     };
 
     setMessages((current) => [...current, userMessage, botMessage]);
     setInput("");
-    return;
   }
-
-  // 🤖 DEFAULT RESPONSE
-  const botMessage: Message = {
-    sender: "bot",
-    text: randomReply(),
-  };
-
-  setMessages((current) => [...current, userMessage, botMessage]);
-  setInput("");
-}
-
-
 
   return (
     <main className="min-h-screen bg-gray-100">
@@ -305,3 +305,4 @@ if (lower.includes("clanker")) {
     </main>
   );
 }
+
