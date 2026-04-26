@@ -7,7 +7,8 @@ export default function BannedPage() {
         <h1 className="text-5xl font-bold mb-4">PERMANENTLY BANNED</h1>
 
         <p className="text-lg mb-2">
-          Your LinkedOut account has been permanently suspended. As a result, your job prospects have fallen to rock bottom without LinkedOut.
+          Your LinkedOut account has been permanently suspended. As a result,
+          your job prospects have fallen to rock bottom without LinkedOut.
         </p>
 
         <p className="text-sm text-red-300 mb-8">
@@ -17,3 +18,4 @@ export default function BannedPage() {
     </main>
   );
 }
+
