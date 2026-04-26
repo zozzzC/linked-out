@@ -69,7 +69,7 @@ export default function JobsBoard() {
   const filteredJobs = mockJobs.filter(
     (job) =>
       job.title.toLowerCase().includes(query.toLowerCase()) ||
-      job.company.toLowerCase().includes(query.toLowerCase())
+      job.company.toLowerCase().includes(query.toLowerCase()),
   );
 
   function showReply(jobIndex: number) {
@@ -95,8 +95,8 @@ export default function JobsBoard() {
                 message: randomItem(job.replies),
                 loading: false,
               }
-            : reply
-        )
+            : reply,
+        ),
       );
     }, 3000);
   }
@@ -104,18 +104,6 @@ export default function JobsBoard() {
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       <div className="bg-white shadow px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <Link href="/" className="text-sm text-blue-700 hover:underline">
-            ← Back
-          </Link>
-
-          <Link href="/" className="text-xl font-bold text-blue-700">
-            LinkedOut
-          </Link>
-
-          <h1 className="text-xl font-bold text-gray-900">Jobs</h1>
-        </div>
-
         <div className="flex items-center gap-2 bg-gray-100 px-3 py-2 rounded-lg w-96">
           <Search size={16} className="text-gray-500" />
           <input
@@ -132,7 +120,7 @@ export default function JobsBoard() {
           {filteredJobs.map((job) => {
             const originalJobIndex = mockJobs.findIndex(
               (mockJob) =>
-                mockJob.title === job.title && mockJob.company === job.company
+                mockJob.title === job.title && mockJob.company === job.company,
             );
 
             return (
@@ -188,9 +176,7 @@ export default function JobsBoard() {
                   <div className="bg-gray-50 rounded-lg p-3 border border-gray-100">
                     <p
                       className={`text-sm leading-relaxed ${
-                        reply.loading
-                          ? "text-gray-400 italic"
-                          : "text-gray-700"
+                        reply.loading ? "text-gray-400 italic" : "text-gray-700"
                       }`}
                     >
                       {reply.message}
@@ -215,3 +201,4 @@ export default function JobsBoard() {
     </div>
   );
 }
+
